@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="dao.before.CartDao">
+<insert id="add" parameterType="Cart">
+insert into cart  values(null,#{jid},#{uid},#{nums},#{price},#{totalprice},'未结算','未发货')
+</insert>
+<select id="selectCart" resultType="map">
+select * from cart ,jewelry   where uid=#{uid}  and cart.jid=jewelry.jid and state1='未结算'
+</select>
+<select id="selectCart1" resultType="map">
+select * from cart ,jewelry   where uid=#{uid}  and cart.jid=jewelry.jid and state1='已结算'
+</select>
+<delete id="deleteCart" parameterType="int">
+delete from cart where cid=#{cid}
+</delete>
+<update id="updateCart1" parameterType="int">
+update cart set state1='已结算'   where uid=#{uid}
+</update>
+</mapper>
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 

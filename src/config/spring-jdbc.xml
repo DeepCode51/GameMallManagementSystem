@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 加载数据库配置文件 -->
+	<context:property-placeholder location="classpath:config/db.properties" />
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 最大连接数 -->
+		<property name="maxTotal" value="${jdbc.maxTotal}" />
+		<!-- 最大空闲连接数 -->
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<!-- 初始化连接数 -->
+		<property name="initialSize" value="${jdbc.initialSize}" />
+	</bean>
+	<!-- 添加事务支持 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 开启事务注解 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+	<!-- 配置MyBatis工厂，同时指定数据源，并与MyBatis完美整合 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- configLocation的属性值为MyBatis的核心配置文件 -->
+		<property name="configLocation" value="classpath:config/mybatis-config.xml" />
+	</bean>
+	<!--Mapper代理开发，MapperScannerConfigurer将包中所有接口自动装配为MyBatis映射接口Mapper的实现类的实例（映射器），所有映射器都被自动注入SqlSessionFactory实例，同时扫描包中SQL映射文件（.xml） -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- mybatis-spring组件的扫描器，basePackage:属性可以包含多个包名，多个包名之间可以用逗号或分号隔开 -->
+		<property name="basePackage" value="dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+</beans>

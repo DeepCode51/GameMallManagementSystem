@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.before.IndexDao">
+  <insert id="add" parameterType="Jewelry" >
+  	insert into Jewelry values (null,#{jname}, #{jewelry_price},0,#{jewelry_store},#{images},#{fname},#{condition},#{service})
+  </insert>
+  <select id="selectJewelry"  resultType="Jewelry" >
+  	select * from Jewelry
+  </select>
+  <select id="selectJewelry3"  resultType="Jewelry" >
+  	select * from Jewelry order by jewelry_sale desc
+  </select>
+   <select id="getJewelryByPage"  resultType="Jewelry" parameterType="int">
+  	select * from Jewelry limit #{startindex},3
+  </select>
+   <update id="updateJewelry1" parameterType="Jewelry">
+   update Jewelry set jewelry_store=jewelry_store-#{jewelry_sale},jewelry_sale=jewelry_sale+#{jewelry_sale} where jid=#{jid}
+  </update>
+  <select id="selectJewelryByID" parameterType="Integer" resultType="Jewelry" >
+  	select * from Jewelry where jid = #{jid}
+  </select>
+  <select id="selectJewelryByJname" parameterType="String" resultType="Jewelry">
+  select * from Jewelry where jname like '%' #{jname} '%'
+  </select>
+  <select id="selectJewelryByFname" parameterType="String" resultType="Jewelry">
+  select * from Jewelry where fname like '%' #{fname} '%'
+  </select>
+</mapper>

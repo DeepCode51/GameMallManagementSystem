@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="
+    	   http://www.springframework.org/schema/beans 
+    	   http://www.springframework.org/schema/beans/spring-beans.xsd
+    	   http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+    	   http://www.springframework.org/schema/mvc 
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    	   ">                 
+  <context:component-scan base-package="controller"/>
+  <context:component-scan base-package="service"/>
+  <mvc:annotation-driven></mvc:annotation-driven>
+  <mvc:resources location="/static/" mapping="/static/**"></mvc:resources>
+   <mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+              id="internalResourceViewResolver">
+       <!-- 前缀 -->
+       <property name="prefix" value="/pages/" />
+       <!-- 后缀 -->
+       <property name="suffix" value=".jsp" />
+  </bean>
+  <!--使用Spring的CommosMultipartResolver，配置MultipartResolver 用于文件上传 -->  
+   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"  
+    p:defaultEncoding="UTF-8"  p:maxUploadSize="5400000"  p:uploadTempDir="fileUpload/temp">   
+    </bean> 
+     <!--D:\spring mvc workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\fileUpload  -->  
+    <!-- defaultEncoding="UTF-8" 是请求的编码格式，默认为iso-8859-1
+maxUploadSize="5400000" 是允许上传文件的最大值，单位为字节
+uploadTempDir="fileUpload/temp" 为上传文件的临时路径 --> 
+   <!-- 配置消息属性文件 -->   
+    <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <!-- 资源文件名-->
+        <property name="basenames">   
+         <list>    
+            <value>classpath:resource/errorMessages</value>
+            <value>classpath:resource/messageResource</value>
+         </list>   
+        </property>
+        <!-- 资源文件编码格式 -->
+        <property name="fileEncodings" value="utf-8" />
+        <!-- 对资源文件内容缓存时间，单位秒 -->
+        <property name="cacheSeconds" value="120" />
+    </bean>
+    
+    
+  <bean id="localeResolver" 
+     class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+     <property name="defaultLocale" value="zh_CN"></property>
+     </bean>
+     <mvc:interceptors>
+ <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+</mvc:interceptors> 
+	<!-- 注册校验器 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<!-- hibernate校验器 -->
+		<property name="providerClass"
+			value="org.hibernate.validator.HibernateValidator" />
+		<!-- 指定校验使用的资源文件，在文件中配置校验错误信息，如果不指定则默认使用classpath下的ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+	<mvc:annotation-driven validator="validator" />
+    <!-- 开启spring的Valid功能 -->
+    <mvc:annotation-driven conversion-service="conversionService" validator="validator"/>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    </bean>  
+    
+</beans>

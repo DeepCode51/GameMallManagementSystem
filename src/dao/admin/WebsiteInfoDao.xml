@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.admin.WebsiteInfoDao">
+  <insert id="add" parameterType="WebsiteInfo" >
+  	insert into WebsiteInfo values (null,#{info_name}, #{info_detail},#{info_img},now())
+  </insert>
+  <select id="selectWebsiteInfo"  resultType="WebsiteInfo" >
+  	select * from WebsiteInfo
+  </select>
+   <delete id="deleteWebsiteInfo" parameterType="Integer">
+	delete from WebsiteInfo where wid = #{wid}
+  </delete>
+   <update id="updateWebsiteInfo" parameterType="WebsiteInfo">
+  update WebsiteInfo set info_name=#{info_name},info_detail=#{info_detail} where wid=#{wid}
+  </update>
+  <select id="selectWebsiteInfoByID" parameterType="Integer" resultType="WebsiteInfo" >
+  	select * from WebsiteInfo where wid = #{wid}
+  </select>
+</mapper>

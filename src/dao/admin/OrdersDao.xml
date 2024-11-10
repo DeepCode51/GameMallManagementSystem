@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="dao.admin.OrdersDao">
+<insert id="add" parameterType="map">
+insert into Orders  values(null,#{jewelryinfo},'未发货',now(),#{userinfo})
+</insert>
+<select id="selectOrders" resultType="map" parameterType="int">
+select * from Orders where orderstate='未发货' 
+</select>
+<select id="selectOrders1" resultType="map" parameterType="int">
+select * from Orders where orderstate='已发货' 
+</select>
+<update id="updateOrders" parameterType="int">
+update Orders set orderstate='已发货' 
+</update>
+<delete id="deleteOrders" parameterType="int">
+delete from Orders where oid=#{oid}
+</delete>
+<update id="updateCart" >
+update cart set state2='已发货' 
+</update>
+</mapper>
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 

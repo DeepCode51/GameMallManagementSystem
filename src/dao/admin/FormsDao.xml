@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.admin.FormsDao">
+  <insert id="add" parameterType="Forms" >
+  	insert into Forms values (null,#{fname})
+  </insert>
+  <select id="selectForms"  resultType="Forms" >
+  	select * from Forms
+  </select>
+  <delete id="deleteForms" parameterType="Integer">
+	delete from Forms where fid = #{fid}
+  </delete>
+  
+</mapper>
